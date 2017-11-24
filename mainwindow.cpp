@@ -1,15 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(timeUnits *m_timeObject, QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    timeObject(m_timeObject),
-    m_pTableWidget(NULL)
+MainWindow::MainWindow(timeUnits *timeUnitsObj, QWidget *parent) :
+QMainWindow(parent),
+ui(new Ui::MainWindow),
+timeUnitsObj(timeUnitsObj),
+m_pTableWidget(NULL)
 {
     ui->setupUi(this);
-    setup_connections();
-    QStringList m_TableHeader;
+    setupConnections();
+    ui->timer_ms->display(timeUnitsObj->getMs());
+    ui->timer_s->display(timeUnitsObj->getS());
+    ui->timer_m->display(timeUnitsObj->getM());
+    ui->timer_h->display(timeUnitsObj->getH());
+    // Table for Splits
     m_pTableWidget = ui->splitTable;
     m_pTableWidget->setRowCount(0);
     m_pTableWidget->setColumnCount(3);
@@ -24,95 +28,89 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::start_timer()
+void MainWindow::startTimer()
 {
-    if(timeObject->getTimeIsRunning() == false){
-        timeObject->start_timer();
+    if(timeUnitsObj->getTimeIsRunning() == false){
+        timeUnitsObj->startTimer();
         ui->b_split->setDisabled(false);
         ui->b_start->setDisabled(true);
         ui->b_stop->setText("Stop");
     }
-
-
 }
 
-void MainWindow::stop_timer()
+void MainWindow::stopTimer()
 {
-    if(timeObject->getTimeIsRunning() == true){
-        timeObject->getTimer()->stop();
-        timeObject->setTimeIsRunning(false);
+    if(timeUnitsObj->getTimeIsRunning()){
+        timeUnitsObj->getTimer()->stop();
+        timeUnitsObj->setTimeIsRunning(false);
         ui->b_split->setDisabled(true);
         ui->b_start->setDisabled(false);
         ui->b_stop->setText("Reset");
     }
     else{
-        timeObject->setMs(0);
-        timeObject->setS(0);
-        timeObject->setM(0);
-        timeObject->setH(0);
-        emit timeObject->ms_changed();
-        emit timeObject->s_changed();
-        emit timeObject->m_changed();
-        emit timeObject->h_changed();
+        timeUnitsObj->setMs(0);
+        timeUnitsObj->setS(0);
+        timeUnitsObj->setM(0);
+        timeUnitsObj->setH(0);
+        emit timeUnitsObj->msChanged();
+        emit timeUnitsObj->sChanged();
+        emit timeUnitsObj->mChanged();
+        emit timeUnitsObj->hChanged();
         ui->b_stop->setText("Stop");
     }
 }
 
-void MainWindow::split_timer()
+void MainWindow::splitTimer()
 {
-    timeObject->addSplit();
+    timeUnitsObj->addSplit();
+    QList<timeSplit*> splitList = timeUnitsObj->getSplits();
 
-    QList<timeSplit*> splitList = timeObject->getSplits();
-    timeSplit* timeSplitObj = splitList.last();
-    QString msString = QString::number(timeSplitObj->getMs());
-    QTime *timeObj = new QTime(timeSplitObj->getH(), timeSplitObj->getM(), timeSplitObj->getS());
-    QString timeStr = timeObj->toString();
-
+    timeSplit* lastTimeSplit = splitList.last();
+    QTime *timeObj = new QTime(lastTimeSplit->getH(), lastTimeSplit->getM(), lastTimeSplit->getS());
     m_pTableWidget->setRowCount(m_pTableWidget->rowCount() + 1);
     m_pTableWidget->setItem(splitList.count() -1, 0, new QTableWidgetItem(QString::number(splitList.count())));
-    m_pTableWidget->setItem(splitList.count() -1, 1, new QTableWidgetItem(timeStr + '.' + msString));
-
+    m_pTableWidget->setItem(splitList.count() -1, 1, new QTableWidgetItem(timeObj->toString() + '.' + QString::number(lastTimeSplit->getMs())));
 }
 
-void MainWindow::clear_splits()
+void MainWindow::clearSplits()
 {
-    timeObject->clearSplits();
+    timeUnitsObj->clearSplits();
     m_pTableWidget->setRowCount(0);
 }
 
-void MainWindow::update_ms()
+void MainWindow::updateMs()
 {
-    ui->timer_ms->display(timeObject->getMs());
+    ui->timer_ms->display(timeUnitsObj->getMs());
 }
 
-void MainWindow::update_s()
+void MainWindow::updateS()
 {
-    ui->timer_s->display(timeObject->getS());
+    ui->timer_s->display(timeUnitsObj->getS());
 }
 
-void MainWindow::update_m()
+void MainWindow::updateM()
 {
-    ui->timer_m->display(timeObject->getM());
+    ui->timer_m->display(timeUnitsObj->getM());
 }
 
-void MainWindow::update_h()
+void MainWindow::updateH()
 {
-    ui->timer_h->display(timeObject->getH());
+    ui->timer_h->display(timeUnitsObj->getH());
 }
 
 void MainWindow::saveToFile()
 {
-    fileObject->saveToFile(timeObject);
+    fileStreamObject->saveToFile(timeUnitsObj);
 }
 
-void MainWindow::setup_connections(){
-connect(ui->b_start, &QPushButton::clicked, this, &MainWindow::start_timer);
-connect(ui->b_stop, &QPushButton::clicked, this, &MainWindow::stop_timer);
-connect(ui->b_split, &QPushButton::clicked, this, &MainWindow::split_timer);
-connect(ui->b_clear, &QPushButton::clicked, this, &MainWindow::clear_splits);
-connect(timeObject, &timeUnits::ms_changed, this, &MainWindow::update_ms);
-connect(timeObject, &timeUnits::s_changed, this, &MainWindow::update_s);
-connect(timeObject, &timeUnits::m_changed, this, &MainWindow::update_m);
-connect(timeObject, &timeUnits::h_changed, this, &MainWindow::update_h);
-connect(ui->b_save, &QPushButton::clicked, this, &MainWindow::saveToFile);
+void MainWindow::setupConnections(){
+    connect(ui->b_start, &QPushButton::clicked, this, &MainWindow::startTimer);
+    connect(ui->b_stop, &QPushButton::clicked, this, &MainWindow::stopTimer);
+    connect(ui->b_split, &QPushButton::clicked, this, &MainWindow::splitTimer);
+    connect(ui->b_clear, &QPushButton::clicked, this, &MainWindow::clearSplits);
+    connect(timeUnitsObj, &timeUnits::msChanged, this, &MainWindow::updateMs);
+    connect(timeUnitsObj, &timeUnits::sChanged, this, &MainWindow::updateS);
+    connect(timeUnitsObj, &timeUnits::mChanged, this, &MainWindow::updateM);
+    connect(timeUnitsObj, &timeUnits::hChanged, this, &MainWindow::updateH);
+    connect(ui->b_save, &QPushButton::clicked, this, &MainWindow::saveToFile);
 }

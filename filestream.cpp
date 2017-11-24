@@ -2,7 +2,6 @@
 
 fileStream::fileStream(QObject *parent) : QObject(parent)
 {
-
 }
 
 void fileStream::saveToFile(timeUnits* list)
@@ -15,13 +14,12 @@ void fileStream::saveToFile(timeUnits* list)
     }
     else{
         QFile file(fileName);
-        if(!file.open(QIODevice::WriteOnly)){   // QIODevice ist abstrakt
+        if(!file.open(QIODevice::WriteOnly)){   // QIODevice is abstract
             QMessageBox::information(0, "Datei kann nicht beschrieben werden", file.errorString());
             return;
         }
         else {
             QTextStream out(&file);
-
             for(int i = 0; i < splitList.count(); i++)
             {
                 out << splitList[i]->getH() << ':'
@@ -32,5 +30,4 @@ void fileStream::saveToFile(timeUnits* list)
             file.close();
         }
     }
-
 }

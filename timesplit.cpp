@@ -2,7 +2,6 @@
 
 timeSplit::timeSplit(QObject *parent) : QObject(parent)
 {
-
 }
 
 int timeSplit::getMs() const

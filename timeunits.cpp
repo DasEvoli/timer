@@ -4,23 +4,23 @@ timeUnits::timeUnits(QObject *parent) : QObject(parent)
 {
 }
 
-void timeUnits::start_timer()
+void timeUnits::startTimer()
 {
    timer = new QTimer(this);
-   connect(timer, SIGNAL(timeout()), this, SLOT(countup_ms()));
+   connect(timer, SIGNAL(timeout()), this, SLOT(countupMs()));
    setTimeIsRunning(true);
    timer->start(10);
 }
 
-void timeUnits::countup_ms()
+void timeUnits::countupMs()
 {
     if(ms <= 980){
         ms += 10;
-        emit ms_changed();
+        emit msChanged();
     }
     else {
         ms = 0;
-        emit ms_changed();
+        emit msChanged();
         count_time_unit_up('s');
     }
 }
@@ -48,8 +48,8 @@ int timeUnits::getH() const
 
 void timeUnits::setH(int value)
 {
-    h =+ value;
-    emit h_changed();
+    h = value;
+    emit hChanged();
 }
 
 int timeUnits::getM() const
@@ -59,8 +59,8 @@ int timeUnits::getM() const
 
 void timeUnits::setM(int value)
 {
-    m =+ value;
-    emit m_changed();
+    m = value;
+    emit mChanged();
 }
 
 int timeUnits::getS() const
@@ -70,8 +70,8 @@ int timeUnits::getS() const
 
 void timeUnits::setS(int value)
 {
-    s =+ value;
-    emit s_changed();
+    s = value;
+    emit sChanged();
 }
 
 int timeUnits::getMs() const
@@ -81,8 +81,8 @@ int timeUnits::getMs() const
 
 void timeUnits::setMs(int value)
 {
-    ms =+ value;
-    emit ms_changed();
+    ms = value;
+    emit msChanged();
 }
 
 void timeUnits::count_time_unit_up(char unit)
@@ -92,28 +92,28 @@ void timeUnits::count_time_unit_up(char unit)
     case 's':
         if(s <=58){
             s++;
-            emit s_changed();
+            emit sChanged();
         }
         else {
             setS(0);
-            emit s_changed();
+            emit sChanged();
             count_time_unit_up('m');
         }
         break;
     case 'm':
         if(m <= 58){
             m++;
-            emit m_changed();
+            emit mChanged();
         }
         else{
             setM(0);
-            emit m_changed();
+            emit mChanged();
             count_time_unit_up('h');
         }
         break;
     case 'h':
             h++;
-            emit h_changed();
+            emit hChanged();
         break;
     }
 }

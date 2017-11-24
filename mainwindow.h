@@ -2,49 +2,45 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "timeunits.h"
 #include <QTableWidget>
 #include <QCoreApplication>
-#include <QHeaderView>
-#include <QMessageBox>
 #include <QTime>
+#include "timeunits.h"
 #include "filestream.h"
 
 namespace Ui {
 class MainWindow;
 }
-class timeUnits;
-class fileStream;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(timeUnits* timeObject, QWidget *parent = 0);
+    explicit MainWindow(timeUnits* timeUnitsObj, QWidget *parent = 0);
     ~MainWindow();
+    void setupConnections();
 
 public slots:
-    void start_timer();
-    void stop_timer();
-    void split_timer();
-    void clear_splits();
-    void update_ms();
-    void update_s();
-    void update_m();
-    void update_h();
+    void startTimer();
+    void stopTimer();
+    void splitTimer();
+    void clearSplits();
+    void updateMs();
+    void updateS();
+    void updateM();
+    void updateH();
     void saveToFile();
-
 
 signals:
 
 
 private:
-    Ui::MainWindow *ui;
-    timeUnits* timeObject;
-    void setup_connections();
+    Ui::MainWindow* ui;
+    timeUnits* timeUnitsObj;
     QTableWidget* m_pTableWidget;
-    fileStream* fileObject;
+    QStringList m_TableHeader;
+    fileStream* fileStreamObject;
 
 };
 
