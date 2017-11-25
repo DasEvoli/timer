@@ -1,19 +1,18 @@
 #include "filestream.h"
 
-fileStream::fileStream(QObject *parent) : QObject(parent)
+FileStream::FileStream(QObject *parent) : QObject(parent)
 {
 }
 
-void fileStream::saveToFile(timeUnits* list)
+void FileStream::saveToFile(Stopwatch* list)
 {
-    QList<timeSplit*>splitList = list->getSplits();
-    QString fileName = QFileDialog::getSaveFileName(0, "Speicher Splits", "C:\\Users\\Laura\\Documents\\stopwatch_splits", "Text (*.txt)");
-
-    if(fileName.isEmpty()){
+    QList<Stopwatch*>splitList = list->getSplits();
+    QString saveLocation = QFileDialog::getSaveFileName(nullptr, "Speicher Splits", "C:\\Users\\Laura\\Documents\\stopwatch_splits", "Text (*.txt)");
+    if(saveLocation.isEmpty()){
         return;
     }
     else{
-        QFile file(fileName);
+        QFile file(saveLocation);
         if(!file.open(QIODevice::WriteOnly)){   // QIODevice is abstract
             QMessageBox::information(0, "Datei kann nicht beschrieben werden", file.errorString());
             return;

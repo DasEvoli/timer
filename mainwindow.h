@@ -5,7 +5,7 @@
 #include <QTableWidget>
 #include <QCoreApplication>
 #include <QTime>
-#include "timeunits.h"
+#include "stopwatch.h"
 #include "filestream.h"
 
 namespace Ui {
@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(timeUnits* timeUnitsObj, QWidget *parent = 0);
+    explicit MainWindow(Stopwatch* stopwatchObj, QWidget *parent = 0);
     ~MainWindow();
     void setupConnections();
 
@@ -37,10 +37,10 @@ signals:
 
 private:
     Ui::MainWindow* ui;
-    timeUnits* timeUnitsObj;
+    Stopwatch* stopwatchObj;
     QTableWidget* m_pTableWidget;
     QStringList m_TableHeader;
-    fileStream* fileStreamObject;
+    FileStream* fileStreamObject;
 
 };
 

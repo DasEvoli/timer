@@ -26,15 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    timeunits.cpp \
-    timesplit.cpp \
-    filestream.cpp
+    filestream.cpp \
+    stopwatch.cpp
 
 HEADERS += \
         mainwindow.h \
-    timeunits.h \
-    timesplit.h \
-    filestream.h
+    filestream.h \
+    stopwatch.h
 
 FORMS += \
         mainwindow.ui

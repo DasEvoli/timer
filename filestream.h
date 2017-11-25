@@ -4,23 +4,21 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
-#include "timeunits.h"
+#include "stopwatch.h"
 
-class fileStream : public QObject
+class FileStream : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit fileStream(QObject *parent = nullptr);
-    void saveToFile(timeUnits*);
+    explicit FileStream(QObject *parent = nullptr);
+    void saveToFile(Stopwatch*);
 
 signals:
 
 public slots:
 
 private:
-    QString saveLocation;
-    QString loadLocation;
 
 };
 

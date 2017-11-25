@@ -1,18 +1,18 @@
-#include "timeunits.h"
+#include "stopwatch.h"
 
-timeUnits::timeUnits(QObject *parent) : QObject(parent)
+Stopwatch::Stopwatch(QObject *parent) : QObject(parent)
 {
 }
 
-void timeUnits::startTimer()
+void Stopwatch::startTimer()
 {
    timer = new QTimer(this);
-   connect(timer, SIGNAL(timeout()), this, SLOT(countupMs()));
+   connect(timer, SIGNAL(timeout()), this, SLOT(countUpMs()));
    setTimeIsRunning(true);
    timer->start(10);
 }
 
-void timeUnits::countupMs()
+void Stopwatch::countUpMs()
 {
     if(ms <= 980){
         ms += 10;
@@ -21,71 +21,70 @@ void timeUnits::countupMs()
     else {
         ms = 0;
         emit msChanged();
-        count_time_unit_up('s');
+        countTimeUnitUp('s');
     }
 }
 
-
-QTimer *timeUnits::getTimer() const
+QTimer *Stopwatch::getTimer() const
 {
     return timer;
 }
 
-bool timeUnits::getTimeIsRunning() const
+bool Stopwatch::getTimeIsRunning() const
 {
     return timeIsRunning;
 }
 
-void timeUnits::setTimeIsRunning(bool value)
+void Stopwatch::setTimeIsRunning(bool value)
 {
     timeIsRunning = value;
 }
 
-int timeUnits::getH() const
+int Stopwatch::getH() const
 {
     return h;
 }
 
-void timeUnits::setH(int value)
+void Stopwatch::setH(int value)
 {
     h = value;
     emit hChanged();
 }
 
-int timeUnits::getM() const
+int Stopwatch::getM() const
 {
     return m;
 }
 
-void timeUnits::setM(int value)
+void Stopwatch::setM(int value)
 {
     m = value;
     emit mChanged();
 }
 
-int timeUnits::getS() const
+int Stopwatch::getS() const
 {
     return s;
 }
 
-void timeUnits::setS(int value)
+void Stopwatch::setS(int value)
 {
     s = value;
     emit sChanged();
 }
 
-int timeUnits::getMs() const
+int Stopwatch::getMs() const
 {
     return ms;
 }
 
-void timeUnits::setMs(int value)
+void Stopwatch::setMs(int value)
 {
     ms = value;
     emit msChanged();
 }
 
-void timeUnits::count_time_unit_up(char unit)
+void Stopwatch::countTimeUnitUp(char unit)
 {
     switch(unit)
     {
@@ -97,7 +96,7 @@ void timeUnits::count_time_unit_up(char unit)
         else {
             setS(0);
             emit sChanged();
-            count_time_unit_up('m');
+            countTimeUnitUp('m');
         }
         break;
     case 'm':
@@ -108,7 +107,7 @@ void timeUnits::count_time_unit_up(char unit)
         else{
             setM(0);
             emit mChanged();
-            count_time_unit_up('h');
+            countTimeUnitUp('h');
         }
         break;
     case 'h':
@@ -118,20 +117,19 @@ void timeUnits::count_time_unit_up(char unit)
     }
 }
 
-
-QList<timeSplit*>timeUnits::getSplits() const
+QList<Stopwatch*> Stopwatch::getSplits() const
 {
     return splits;
 }
 
-void timeUnits::clearSplits()
+void Stopwatch::clearSplits()
 {
     splits.clear();
 }
 
-void timeUnits::addSplit()
+void Stopwatch::addSplit()
 {
-    auto obj = new timeSplit();
+    auto obj = new Stopwatch();
     obj->setMs(ms);
     obj->setS(s);
     obj->setM(m);

@@ -1,18 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(timeUnits *timeUnitsObj, QWidget *parent) :
+MainWindow::MainWindow(Stopwatch *stopwatchObj, QWidget *parent) :
 QMainWindow(parent),
 ui(new Ui::MainWindow),
-timeUnitsObj(timeUnitsObj),
+stopwatchObj(stopwatchObj),
 m_pTableWidget(NULL)
 {
     ui->setupUi(this);
     setupConnections();
-    ui->timer_ms->display(timeUnitsObj->getMs());
-    ui->timer_s->display(timeUnitsObj->getS());
-    ui->timer_m->display(timeUnitsObj->getM());
-    ui->timer_h->display(timeUnitsObj->getH());
+    ui->timer_ms->display(stopwatchObj->getMs());
+    ui->timer_s->display(stopwatchObj->getS());
+    ui->timer_m->display(stopwatchObj->getM());
+    ui->timer_h->display(stopwatchObj->getH());
     // Table for Splits
     m_pTableWidget = ui->splitTable;
     m_pTableWidget->setRowCount(0);
@@ -30,8 +30,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::startTimer()
 {
-    if(timeUnitsObj->getTimeIsRunning() == false){
-        timeUnitsObj->startTimer();
+    if(stopwatchObj->getTimeIsRunning() == false){
+        stopwatchObj->startTimer();
         ui->b_split->setDisabled(false);
         ui->b_start->setDisabled(true);
         ui->b_stop->setText("Stop");
@@ -40,32 +40,32 @@ void MainWindow::startTimer()
 
 void MainWindow::stopTimer()
 {
-    if(timeUnitsObj->getTimeIsRunning()){
-        timeUnitsObj->getTimer()->stop();
-        timeUnitsObj->setTimeIsRunning(false);
+    if(stopwatchObj->getTimeIsRunning()){
+        stopwatchObj->getTimer()->stop();
+        stopwatchObj->setTimeIsRunning(false);
         ui->b_split->setDisabled(true);
         ui->b_start->setDisabled(false);
         ui->b_stop->setText("Reset");
     }
     else{
-        timeUnitsObj->setMs(0);
-        timeUnitsObj->setS(0);
-        timeUnitsObj->setM(0);
-        timeUnitsObj->setH(0);
-        emit timeUnitsObj->msChanged();
-        emit timeUnitsObj->sChanged();
-        emit timeUnitsObj->mChanged();
-        emit timeUnitsObj->hChanged();
+        stopwatchObj->setMs(0);
+        stopwatchObj->setS(0);
+        stopwatchObj->setM(0);
+        stopwatchObj->setH(0);
+        emit stopwatchObj->msChanged();
+        emit stopwatchObj->sChanged();
+        emit stopwatchObj->mChanged();
+        emit stopwatchObj->hChanged();
         ui->b_stop->setText("Stop");
     }
 }
 
 void MainWindow::splitTimer()
 {
-    timeUnitsObj->addSplit();
-    QList<timeSplit*> splitList = timeUnitsObj->getSplits();
+    stopwatchObj->addSplit();
+    QList<Stopwatch*> splitList = stopwatchObj->getSplits();
 
-    timeSplit* lastTimeSplit = splitList.last();
+    Stopwatch* lastTimeSplit = splitList.last();
     QTime *timeObj = new QTime(lastTimeSplit->getH(), lastTimeSplit->getM(), lastTimeSplit->getS());
     m_pTableWidget->setRowCount(m_pTableWidget->rowCount() + 1);
     m_pTableWidget->setItem(splitList.count() -1, 0, new QTableWidgetItem(QString::number(splitList.count())));
@@ -74,33 +74,33 @@ void MainWindow::splitTimer()
 
 void MainWindow::clearSplits()
 {
-    timeUnitsObj->clearSplits();
+    stopwatchObj->clearSplits();
     m_pTableWidget->setRowCount(0);
 }
 
 void MainWindow::updateMs()
 {
-    ui->timer_ms->display(timeUnitsObj->getMs());
+    ui->timer_ms->display(stopwatchObj->getMs());
 }
 
 void MainWindow::updateS()
 {
-    ui->timer_s->display(timeUnitsObj->getS());
+    ui->timer_s->display(stopwatchObj->getS());
 }
 
 void MainWindow::updateM()
 {
-    ui->timer_m->display(timeUnitsObj->getM());
+    ui->timer_m->display(stopwatchObj->getM());
 }
 
 void MainWindow::updateH()
 {
-    ui->timer_h->display(timeUnitsObj->getH());
+    ui->timer_h->display(stopwatchObj->getH());
 }
 
 void MainWindow::saveToFile()
 {
-    fileStreamObject->saveToFile(timeUnitsObj);
+    fileStreamObject->saveToFile(stopwatchObj);
 }
 
 void MainWindow::setupConnections(){
@@ -108,9 +108,9 @@ void MainWindow::setupConnections(){
     connect(ui->b_stop, &QPushButton::clicked, this, &MainWindow::stopTimer);
     connect(ui->b_split, &QPushButton::clicked, this, &MainWindow::splitTimer);
     connect(ui->b_clear, &QPushButton::clicked, this, &MainWindow::clearSplits);
-    connect(timeUnitsObj, &timeUnits::msChanged, this, &MainWindow::updateMs);
-    connect(timeUnitsObj, &timeUnits::sChanged, this, &MainWindow::updateS);
-    connect(timeUnitsObj, &timeUnits::mChanged, this, &MainWindow::updateM);
-    connect(timeUnitsObj, &timeUnits::hChanged, this, &MainWindow::updateH);
+    connect(stopwatchObj, &Stopwatch::msChanged, this, &MainWindow::updateMs);
+    connect(stopwatchObj, &Stopwatch::sChanged, this, &MainWindow::updateS);
+    connect(stopwatchObj, &Stopwatch::mChanged, this, &MainWindow::updateM);
+    connect(stopwatchObj, &Stopwatch::hChanged, this, &MainWindow::updateH);
     connect(ui->b_save, &QPushButton::clicked, this, &MainWindow::saveToFile);
 }

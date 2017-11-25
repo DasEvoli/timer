@@ -1,36 +1,37 @@
-#ifndef TIMEUNITS_H
-#define TIMEUNITS_H
+// TODO: Rename this class to smth more specific
+
+#ifndef STOPWATCH_H
+#define STOPWATCH_H
 
 #include <QObject>
 #include <QTimer>
 #include <QList>
-#include "timesplit.h"
 
 class timeSplit;
 class MainWindow;
 
 
-class timeUnits : public QObject
+class Stopwatch : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit timeUnits(QObject *parent = nullptr);
+    explicit Stopwatch(QObject *parent = nullptr);
     int getMs() const;
-    void setMs(int value);
-    int getS() const;
-    void setS(int value);
+    int getS() const;   
     int getM() const;
-    void setM(int value);
     int getH() const;
+    void setMs(int value);
+    void setS(int value);
+    void setM(int value);
     void setH(int value);
-    void count_time_unit_up(char);
     bool getTimeIsRunning() const;
     void setTimeIsRunning(bool value);
     QTimer* getTimer() const;
-    QList<timeSplit*> getSplits() const;
+    QList<Stopwatch*> getSplits() const;
     void clearSplits();
     void addSplit();
+    void countTimeUnitUp(char);
 
 signals:
     void timerWasStarted(); // unused
@@ -41,11 +42,11 @@ signals:
 
 public slots:
     void startTimer();
-    void countupMs();
+    void countUpMs();
 
 private:
     QTimer* timer;
-    QList<timeSplit*> splits;
+    QList<Stopwatch*> splits;
     bool timeIsRunning = false;
     int ms = 0;
     int s = 0;
@@ -54,4 +55,4 @@ private:
 
 };
 
-#endif // TIMEUNITS_H
+#endif // STOPWATCH_H
