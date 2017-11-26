@@ -5,8 +5,8 @@
 #include <QTableWidget>
 #include <QCoreApplication>
 #include <QTime>
-#include "stopwatch.h"
-#include "filestream.h"
+#include "stopwatch\stopwatch.h"
+#include "stopwatch\filestream.h"
 
 namespace Ui {
 class MainWindow;

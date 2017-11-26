@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QtGlobal>
-#include "stopwatch.h"
+#include "stopwatch\stopwatch.h"
 
 typedef int qint32;
 

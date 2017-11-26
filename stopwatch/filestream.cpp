@@ -1,4 +1,4 @@
-#include "filestream.h"
+#include "stopwatch\filestream.h"
 
 FileStream::FileStream(QObject *parent) : QObject(parent)
 {

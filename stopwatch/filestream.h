@@ -4,7 +4,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
-#include "stopwatch.h"
+#include "stopwatch\stopwatch.h"
 
 class FileStream : public QObject
 {

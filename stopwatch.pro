@@ -26,13 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    filestream.cpp \
-    stopwatch.cpp
+    stopwatch\filestream.cpp \
+    stopwatch\stopwatch.cpp
 
 HEADERS += \
         mainwindow.h \
-    filestream.h \
-    stopwatch.h
+    stopwatch\filestream.h \
+    stopwatch\stopwatch.h
 
 FORMS += \
         mainwindow.ui

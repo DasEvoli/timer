@@ -21,6 +21,10 @@ m_pTableWidget(NULL)
     m_pTableWidget->setHorizontalHeaderLabels(m_TableHeader);
     m_pTableWidget->verticalHeader()->setVisible(false);
     m_pTableWidget->setShowGrid(false);
+
+    ui->tabWidget->setTabText(0, "Stopwatch");
+    ui->tabWidget->setTabText(1, "Alarm Clock");
+    ui->tabWidget->setMovable(true);
 }
 
 MainWindow::~MainWindow()
@@ -69,7 +73,7 @@ void MainWindow::splitTimer()
     QTime *timeObj = new QTime(lastTimeSplit->getH(), lastTimeSplit->getM(), lastTimeSplit->getS());
     m_pTableWidget->setRowCount(m_pTableWidget->rowCount() + 1);
     m_pTableWidget->setItem(splitList.count() -1, 0, new QTableWidgetItem(QString::number(splitList.count())));
-    m_pTableWidget->setItem(splitList.count() -1, 1, new QTableWidgetItem(timeObj->toString() + '.' + QString::number(lastTimeSplit->getMs())));
+    m_pTableWidget->setItem(splitList.count() -1, 1, new QTableWidgetItem(timeObj->toString() + '.' + QString::number(lastTimeSplit->getMs() / 10)));
 }
 
 void MainWindow::clearSplits()
@@ -80,7 +84,7 @@ void MainWindow::clearSplits()
 
 void MainWindow::updateMs()
 {
-    ui->timer_ms->display(stopwatchObj->getMs());
+    ui->timer_ms->display(stopwatchObj->getMs() / 10);
 }
 
 void MainWindow::updateS()

@@ -1,4 +1,4 @@
-#include "stopwatch.h"
+#include "stopwatch\stopwatch.h"
 
 Stopwatch::Stopwatch(QObject *parent) : QObject(parent)
 {
