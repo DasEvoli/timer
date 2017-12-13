@@ -1,4 +1,3 @@
-// TODO: Rename this class to smth more specific
 
 #ifndef STOPWATCH_H
 #define STOPWATCH_H
